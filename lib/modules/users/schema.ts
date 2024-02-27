@@ -1,5 +1,4 @@
 import * as mongoose from 'mongoose';
-import { ModificationNote } from '../common/model';
 
 const Schema = mongoose.Schema;
 
@@ -14,11 +13,7 @@ const schema = new Schema({
     email: String,
     phone_number: String,
     gender: String,
-    is_deleted: {
-        type: Boolean,
-        default: false
-    },
-    modification_notes: [ModificationNote]
-});
+    }
+);
 
 export default mongoose.model('users', schema);

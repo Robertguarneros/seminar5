@@ -1,4 +1,3 @@
-import { ModificationNote } from "../common/model";
 
 export interface IUser {
     _id?: String;
@@ -10,6 +9,4 @@ export interface IUser {
     email: String;
     phone_number: String;
     gender: String;
-    is_deleted?: Boolean;
-    modification_notes: ModificationNote[]
 }

@@ -1,5 +1,4 @@
 import { Request, Response } from 'express';
-import { insufficientParameters, mongoError, successResponse, failureResponse } from '../modules/common/service';
 import { IUser } from '../modules/users/model';
 import UserService from '../modules/users/service';
 import e = require('express');
@@ -24,20 +23,14 @@ export class UserController {
                     email: req.body.email,
                     phone_number: req.body.phone_number,
                     gender: req.body.gender,
-                    modification_notes: [{
-                        modified_on: new Date(Date.now()),
-                        modified_by: null,
-                        modification_note: 'New user created'
-                    }]
                 };
                 const user_data = await this.user_service.createUser(user_params);
-                successResponse('create user successful', user_data, res);
-            } else {
-                // error response if some fields are missing in request body
-                insufficientParameters(res);
+                return res.status(201).json({ message: 'User created successfully', user: user_data });
+            }else{            
+                return res.status(400).json({ error: 'Missing fields' });
             }
         }catch(error){
-            mongoError(error,res);
+            return res.status(500).json({ error: 'Internal server error' });
         }
     }
 
@@ -48,12 +41,12 @@ export class UserController {
                 // Fetch user
                 const user_data = await this.user_service.filterUser(user_filter);
                 // Send success response
-                successResponse('get user successful', user_data, res);
+                return res.status(200).json({ data: user_data, message: 'Successful'});
             } else {
-                insufficientParameters(res);
+                return res.status(400).json({ error: 'Missing fields' });
             }
         }catch(error){
-            mongoError(error, res);
+            return res.status(500).json({ error: 'Internal server error' });
         }
     }
 
@@ -69,16 +62,8 @@ export class UserController {
                 const user_data = await this.user_service.filterUser(user_filter);
                 if (!user_data) {
                     // Send failure response if user not found
-                    failureResponse('invalid user', null, res);
-                    return;
+                    return res.status(400).json({ error: 'User not found'});
                 }
-
-                // Update user data
-                user_data.modification_notes.push({
-                    modified_on: new Date(Date.now()),
-                    modified_by: null,
-                    modification_note: 'User data updated'
-                });
 
                 const user_params: IUser = {
                     _id: req.params.id,
@@ -90,20 +75,20 @@ export class UserController {
                     email: req.body.email ? req.body.email : user_data.email,
                     phone_number: req.body.phone_number ? req.body.phone_number : user_data.phone_number,
                     gender: req.body.gender ? req.body.gender : user_data.gender,
-                    is_deleted: req.body.is_deleted ? req.body.is_deleted : user_data.is_deleted,
-                    modification_notes: user_data.modification_notes
                 };
                 // Update user
                 await this.user_service.updateUser(user_params);
+                //get new user data
+                const new_user_data = await this.user_service.filterUser(user_filter);
                 // Send success response
-                successResponse('update user successful', null, res);
+                return res.status(200).json({ data: new_user_data, message: 'Successful'});
             } else {
                 // Send error response if ID parameter or any required fields are missing
-                insufficientParameters(res);
+                return res.status(400).json({ error: 'Missing fields' });
             }
         } catch (error) {
             // Catch and handle any errors
-            mongoError(error, res);
+            return res.status(500).json({ error: 'Internal server error' });
         }
     }
 
@@ -114,18 +99,18 @@ export class UserController {
                 const delete_details = await this.user_service.deleteUser(req.params.id);
                 if (delete_details.deletedCount !== 0) {
                     // Send success response if user deleted
-                    successResponse('delete user successful', null, res);
+                    return res.status(200).json({ message: 'Successful'});
                 } else {
                     // Send failure response if user not found
-                    failureResponse('invalid user', null, res);
+                    return res.status(400).json({ error: 'User not found' });
                 }
             } else {
                 // Send error response if ID parameter is missing
-                insufficientParameters(res);
+                return res.status(400).json({ error: 'Missing Id' });
             }
         } catch (error) {
             // Catch and handle any errors
-            mongoError(error, res);
+            return res.status(500).json({ error: 'Internal server error' });
         }
     }
 }
