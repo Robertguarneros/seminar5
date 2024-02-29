@@ -5,6 +5,7 @@ import environment from "../environment";
 import { TestRoutes } from "../routes/test_routes";
 import { UserRoutes } from "../routes/user_routes";
 import { CommonRoutes } from "../routes/common_routes";
+import { PostRoutes } from "../routes/post_routes";
 
 
 class App {
@@ -15,6 +16,7 @@ class App {
    private test_routes: TestRoutes = new TestRoutes();
    private common_routes: CommonRoutes = new CommonRoutes();
    private user_routes: UserRoutes = new UserRoutes();
+   private post_routes: PostRoutes = new PostRoutes();
 
    constructor() {
       this.app = express();
@@ -22,6 +24,7 @@ class App {
       this.mongoSetup();
       this.test_routes.route(this.app);
       this.user_routes.route(this.app);
+      this.post_routes.route(this.app);
       this.common_routes.route(this.app);
       
    }
@@ -42,7 +45,5 @@ class App {
               console.error("MongoDB connection error:", err);
           });
   }
-  
-
 }
 export default new App().app;

@@ -9,7 +9,7 @@ export class UserController {
 
     public async create_user(req: Request, res: Response) {
         try{
-            // this check whether all the filds were send through the erquest or not
+            // this check whether all the filds were send through the request or not
             if (req.body.name && req.body.name.first_name && req.body.name.middle_name && req.body.name.last_name &&
                 req.body.email &&
                 req.body.phone_number &&
@@ -52,11 +52,7 @@ export class UserController {
 
     public async update_user(req: Request, res: Response) {
         try {
-            if (req.params.id &&
-                (req.body.name || req.body.name.first_name || req.body.name.middle_name || req.body.name.last_name ||
-                    req.body.email ||
-                    req.body.phone_number ||
-                    req.body.gender)) {
+            if (req.params.id) {
                 const user_filter = { _id: req.params.id };
                 // Fetch user
                 const user_data = await this.user_service.filterUser(user_filter);
@@ -64,17 +60,17 @@ export class UserController {
                     // Send failure response if user not found
                     return res.status(400).json({ error: 'User not found'});
                 }
-
+    
                 const user_params: IUser = {
                     _id: req.params.id,
                     name: req.body.name ? {
-                        first_name: req.body.name.first_name ? req.body.name.first_name : user_data.name.first_name,
-                        middle_name: req.body.name.middle_name ? req.body.name.middle_name : user_data.name.middle_name,
-                        last_name: req.body.name.last_name ? req.body.name.last_name : user_data.name.last_name
-                    } : user_data.name,
-                    email: req.body.email ? req.body.email : user_data.email,
-                    phone_number: req.body.phone_number ? req.body.phone_number : user_data.phone_number,
-                    gender: req.body.gender ? req.body.gender : user_data.gender,
+                        first_name: req.body.name.first_name || user_data.name?.first_name,
+                        middle_name: req.body.name.middle_name || user_data.name?.middle_name,
+                        last_name: req.body.name.last_name || user_data.name?.last_name
+                    } : user_data.name || { first_name: '', middle_name: '', last_name: '' }, // Provide empty name object if not provided
+                    email: req.body.email || user_data.email,
+                    phone_number: req.body.phone_number || user_data.phone_number,
+                    gender: req.body.gender || user_data.gender,
                 };
                 // Update user
                 await this.user_service.updateUser(user_params);
@@ -83,14 +79,17 @@ export class UserController {
                 // Send success response
                 return res.status(200).json({ data: new_user_data, message: 'Successful'});
             } else {
-                // Send error response if ID parameter or any required fields are missing
-                return res.status(400).json({ error: 'Missing fields' });
+                // Send error response if ID parameter is missing
+                return res.status(400).json({ error: 'Missing ID parameter' });
             }
         } catch (error) {
             // Catch and handle any errors
+            console.error("Error updating:", error);
             return res.status(500).json({ error: 'Internal server error' });
         }
     }
+    
+    
 
     public async delete_user(req: Request, res: Response) {
         try {
