@@ -1,11 +1,13 @@
 import { Request, Response } from 'express';
 import { IPost } from '../modules/posts/model';
 import PostService from '../modules/posts/service';
+import UserService from '../modules/users/service';
 import e = require('express');
 
 export class PostController {
 
     private post_service: PostService = new PostService();
+    private user_service: UserService = new UserService();
 
     public async createPost(req: Request, res: Response) {
         try{
@@ -17,6 +19,8 @@ export class PostController {
                     author: req.body.author
                 };
                 const post_data = await this.post_service.createPost(post_params);
+                 // Now, you may want to add the created post's ID to the user's array of posts
+                await this.user_service.addPostToUser(req.body.author, post_data._id); //
                 return res.status(201).json({ message: 'Post created successfully', post: post_data });
             }else{            
                 return res.status(400).json({ error: 'Missing fields' });

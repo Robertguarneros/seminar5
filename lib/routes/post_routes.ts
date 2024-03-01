@@ -7,15 +7,15 @@ export class PostRoutes {
 
     public route(app: Application) {
         
-        app.post('/api/post', (req: Request, res: Response) => {
+        app.post('/post', (req: Request, res: Response) => {
             this.post_controller.createPost(req, res);
         });
 
-        app.get('/api/post', (req: Request, res: Response) => {
+        app.get('/post', (req: Request, res: Response) => {
             this.post_controller.getPosts(req, res);
         });
 
-        app.delete('/api/post/:id', (req: Request, res: Response) => {
+        app.delete('/post/:id', (req: Request, res: Response) => {
             this.post_controller.deletePost(req, res);
         });
 

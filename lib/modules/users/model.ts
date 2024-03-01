@@ -9,4 +9,5 @@ export interface IUser {
     email: String;
     phone_number: String;
     gender: String;
+    posts?: string[]; // Array to store post IDs
 }

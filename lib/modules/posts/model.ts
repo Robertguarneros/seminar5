@@ -1,5 +1,8 @@
+import * as mongoose from 'mongoose';
+
 export interface IPost {
+    _id?: mongoose.Types.ObjectId; // Optional _id field
     title: string;
     content: string;
-    author: string; // Reference to the User collection
+    author: mongoose.Types.ObjectId; // Reference to the User collection
 }

@@ -1,5 +1,6 @@
 import { IUser } from './model';
 import users from './schema';
+import { Types } from 'mongoose';
 
 export default class UserService {
     
@@ -36,6 +37,24 @@ export default class UserService {
         try {
             const query = { _id: _id };
             return await users.deleteOne(query);
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    public async addPostToUser(userId: Types.ObjectId, postId: Types.ObjectId): Promise<void> {
+        try {
+            // Retrieve the user document by ID
+            const user = await users.findById(userId);
+            if (!user) {
+                throw new Error('User not found');
+            }
+
+            // Add the post ID to the user's array of posts
+            user.posts.push(postId);
+
+            // Save the updated user document
+            await user.save();
         } catch (error) {
             throw error;
         }

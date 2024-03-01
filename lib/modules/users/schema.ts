@@ -11,6 +11,7 @@ const schema = new Schema({
     email: String,
     phone_number: String,
     gender: String,
+    posts: [{ type: Schema.Types.ObjectId, ref: 'posts' }] // Array of ObjectIds referencing the Post model
     }
 );
 
