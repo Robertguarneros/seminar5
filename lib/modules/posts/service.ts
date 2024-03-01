@@ -28,14 +28,4 @@ export default class PostService {
             throw error;
         }
     }
-    public async getPostsAndAuthors() {
-        try {
-            const postsWithAuthors = await posts.find().populate('author').exec();
-            return postsWithAuthors;
-        } catch (error) {
-            throw error;
-        }
-    }
-    
-    
 }

@@ -11,8 +11,8 @@ export class PostRoutes {
             this.post_controller.createPost(req, res);
         });
 
-        app.get('/post', (req: Request, res: Response) => {
-            this.post_controller.getPosts(req, res);
+        app.get('/post/:id', (req: Request, res: Response) => {
+            this.post_controller.getPost(req, res);
         });
 
         app.delete('/post/:id', (req: Request, res: Response) => {

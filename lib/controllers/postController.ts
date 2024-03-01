@@ -30,12 +30,17 @@ export class PostController {
         }
     }
 
-    public async getPosts(req: Request, res: Response) {
+    public async getPost(req: Request, res: Response) {
         try{
-                // Fetch posts
-                const post_data = await this.post_service.getPostsAndAuthors();
+            if (req.params.id) {
+                const post_filter = { _id: req.params.id };
+                // Fetch user
+                const post_data = await this.post_service.filterPost(post_filter);
                 // Send success response
                 return res.status(200).json({ data: post_data, message: 'Successful'});
+            } else {
+                return res.status(400).json({ error: 'Missing fields' });
+            }
         }catch(error){
             return res.status(500).json({ error: 'Internal server error' });
         }
