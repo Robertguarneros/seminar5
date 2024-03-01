@@ -39,7 +39,7 @@ export class UserController {
             if (req.params.id) {
                 const user_filter = { _id: req.params.id };
                 // Fetch user
-                const user_data = await this.user_service.filterUser(user_filter);
+                const user_data = await this.user_service.populateUserPosts(user_filter);
                 // Send success response
                 return res.status(200).json({ data: user_data, message: 'Successful'});
             } else {

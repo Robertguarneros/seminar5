@@ -60,4 +60,22 @@ export default class UserService {
         }
     }
 
+    public async populateUserPosts(query: any): Promise<IUser | null> {
+        try {
+            // Find the user document and populate the 'posts' field
+            const user = await users.findOne(query).populate('posts').exec();
+            if (!user) {
+                return null;
+            }
+            // Convert _id to string
+            const populatedUser: IUser = {
+                ...user.toObject(),
+                _id: user._id.toString()
+            };
+            return populatedUser;
+        } catch (error) {
+            throw error;
+        }
+    }
+
 }
