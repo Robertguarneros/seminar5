@@ -11,7 +11,8 @@ const schema = new Schema({
     email: String,
     phone_number: String,
     gender: String,
-    posts: [{ type: Schema.Types.ObjectId, ref: 'posts' }] // Array of ObjectIds referencing the Post model
+    posts: [{ type: Schema.Types.ObjectId, ref: 'posts' }], // Array of ObjectIds referencing the Post model
+    reviews: [{ type: Schema.Types.ObjectId, ref: 'reviews' }] // Array of ObjectIds referencing the Post model
     }
 );
 

@@ -7,6 +7,7 @@ import { TestRoutes } from "../routes/test_routes";
 import { UserRoutes } from "../routes/user_routes";
 import { CommonRoutes } from "../routes/common_routes";
 import { PostRoutes } from "../routes/post_routes";
+import { ReviewRoutes } from "../routes/review_routes";
 
 
 class App {
@@ -18,6 +19,7 @@ class App {
    private common_routes: CommonRoutes = new CommonRoutes();
    private user_routes: UserRoutes = new UserRoutes();
    private post_routes: PostRoutes = new PostRoutes();
+   private review_routes: ReviewRoutes = new ReviewRoutes();
 
    constructor() {
       this.app = express();
@@ -26,6 +28,7 @@ class App {
       this.test_routes.route(this.app);
       this.user_routes.route(this.app);
       this.post_routes.route(this.app);
+      this.review_routes.route(this.app);
       this.common_routes.route(this.app);
       
    }

@@ -11,4 +11,5 @@ export interface IUser {
     phone_number: String;
     gender: String;
     posts?: mongoose.Types.ObjectId[]; // Array to store post IDs
+    reviews?: mongoose.Types.ObjectId[]; // Array to store post IDs
 }
